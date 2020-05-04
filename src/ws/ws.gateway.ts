@@ -1,5 +1,4 @@
 import {
-    MessageBody,
     SubscribeMessage,
     WebSocketGateway,
     WebSocketServer,

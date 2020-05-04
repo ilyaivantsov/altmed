@@ -1,41 +1,177 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
+<html lang="ru">
+
+<head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>BIS</title>
-    <link
-      href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="/webrtc/styles.css" />
+    <title>Altmed</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
-  </head>
-  <body>
-    <div class="container">
-      <header class="header">
-        <div class="logo-container">
-          <h1 class="logo-text">
-            BIS-<span class="logo-highlight">Team</span>
-          </h1>
-        </div>
-      </header>
-      <div class="content-container">
-        <div class="active-users-panel" id="active-user-container">
-          <h3 class="panel-title">Active Users:</h3>
-        </div>
-        <div class="video-chat-container">
-          <h2 class="talk-info" id="talking-with-info">
-            Select active user on the left menu.
-          </h2>
-          <div class="video-container">
-            <video autoplay class="remote-video" id="remote-video"></video>
-            <video autoplay muted class="local-video" id="local-video"></video>
-          </div>
-        </div>
-      </div>
+    <style>
+        .remote-video {
+            border: 1px solid #cddfe7;
+            width: 100%;
+            height: 100%;
+            box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .local-video {
+            position: absolute;
+            border: 1px solid #cddfe7;
+            bottom: 5%;
+            right: 5%;
+            box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            width: 30%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <v-app>
+            <v-app-bar app color="white" dark>
+                <div class="d-flex align-center">
+                    <v-img alt="altmed" class="shrink mr-2" contain src="/img/altmed.jpg" transition="scale-transition"
+                        width="40" />
+                </div>
+
+                <v-spacer></v-spacer>
+
+                <v-btn href="https://github.com/accentureHack2020/virus_hack_2020" outlined fab color="black"
+                    target="_blank" text>
+                    <v-icon dark>mdi-github-circle</v-icon>
+                </v-btn>
+            </v-app-bar>
+            <v-content>
+                <v-row>
+                    <v-col cols="12">
+                        <v-row justify="center" aling="center">
+                            <div>
+                                <p class="text-center">
+                                    <v-avatar slot="icon" color="red darken-1" size="40">
+                                        <v-icon icon="mdi-ambulance" color="white">
+                                            mdi-ambulance
+                                        </v-icon>
+                                    </v-avatar>
+                                </p>
+                                <p class="subtitle-2 text-center">ALTMED</p>
+                                <p class="text-center" style="width: 24rem;">
+                                    Приложение позволяет осуществить вызов экстренной помощи. Вы можете заполнить
+                                    анкету, нажав на
+                                    карандаш. Анкета необходима для того, чтобы быстрее реагировать. Для связи нажмите
+                                    кнопку
+                                    звонка.
+                                </p>
+                            </div>
+                        </v-row>
+                        <v-row justify="center" aling="center">
+                            <v-btn class="mx-2" outlined large fab @click="profile = true">
+                                <v-icon dark>mdi-pencil</v-icon>
+                            </v-btn>
+                            <v-btn class="mx-2" outlined large fab color="red darken-1" @click="startRec">
+                                <v-icon dark>mdi-phone-forward</v-icon>
+                            </v-btn>
+                            <v-dialog v-model="profile" fullscreen hide-overlay transition="dialog-bottom-transition"
+                                scrollable>
+                                <v-card tile>
+                                    <v-toolbar flat dark>
+                                        <v-btn icon dark @click="profile = false">
+                                            <v-icon>mdi-close</v-icon>
+                                        </v-btn>
+                                        <v-toolbar-title>Анкета</v-toolbar-title>
+                                        <v-spacer></v-spacer>
+                                        <v-toolbar-items>
+                                            <v-btn dark text @click="profile = false">
+                                                Сохранить
+                                            </v-btn>
+                                        </v-toolbar-items>
+                                    </v-toolbar>
+                                    <v-card-text>
+                                        <v-list three-line subheader>
+                                            <v-subheader>Общие данные</v-subheader>
+                                            <v-list-item>
+                                                <v-list-item-content>
+                                                    <!-- <v-list-item-subtitle>Ф.И.О.</v-list-item-subtitle> -->
+                                                    <v-text-field v-model="name" label="ФИО">
+                                                    </v-text-field>
+                                                </v-list-item-content>
+                                            </v-list-item>
+                                            <v-list-item>
+                                                <v-list-item-content>
+                                                    <v-text-field v-model="address" label="Адрес"
+                                                        prepend-icon="mdi-google-maps">
+                                                    </v-text-field>
+                                                </v-list-item-content>
+                                            </v-list-item>
+                                            <v-list-item>
+                                                <v-list-item-content>
+                                                    <v-list-item-subtitle>Хронические заболевания
+                                                    </v-list-item-subtitle>
+                                                    <v-textarea v-model="disease" counter maxlength="120" full-width
+                                                        single-line></v-textarea>
+                                                </v-list-item-content>
+                                            </v-list-item>
+                                        </v-list>
+                                        <v-divider></v-divider>
+                                    </v-card-text>
+
+                                    <div style="flex: 1 1 auto;"></div>
+                                </v-card>
+                            </v-dialog>
+
+                            <v-bottom-sheet v-model="recorder">
+                                <v-sheet class="text-center" height="200px">
+                                    <v-progress-linear :active="loading" :indeterminate="loading" absolute bottom
+                                        color="deep-purple accent-4"></v-progress-linear>
+                                    <v-btn class="mt-6" text color="red" @click="createVideoCall">
+                                        {{name ? name + ', c': 'C'}}вязаться с
+                                        доктором
+                                    </v-btn>
+                                    <div class="py-3">{{rec}}</div>
+                                    <v-btn class="mt-6" text @click="dialog2 = !dialog2">Закончить запись
+                                    </v-btn>
+                                </v-sheet>
+                            </v-bottom-sheet>
+
+                            <v-dialog v-model="videoChat" fullscreen hide-overlay transition="dialog-bottom-transition"
+                                scrollable>
+                                <v-card tile>
+                                    <v-toolbar flat dark>
+                                        <v-btn icon dark @click="endCall">
+                                            <v-icon>mdi-close</v-icon>
+                                        </v-btn>
+                                        <v-toolbar-title>Видеозвонок</v-toolbar-title>
+                                        <v-spacer></v-spacer>
+                                        <v-toolbar-items>
+                                            <v-btn dark text @click="endCall">
+                                                Закончить
+                                            </v-btn>
+                                        </v-toolbar-items>
+                                    </v-toolbar>
+                                    <v-card-text style="height: 100%;">
+                                        <video autoplay class="remote-video" id="remote-video"></video>
+                                        <video autoplay muted class="local-video" id="local-video"></video>
+                                    </v-card-text>
+
+                                    <div style="flex: 1 1 auto;"></div>
+                                </v-card>
+                            </v-dialog>
+
+
+                        </v-row>
+                    </v-col>
+                </v-row>
+            </v-content>
+        </v-app>
     </div>
-    <script src="/webrtc/scripts/index.js"></script>
-  </body>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+    <script src="/js/vue.js"></script>
+</body>
+
 </html>
