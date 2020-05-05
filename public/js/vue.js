@@ -92,7 +92,7 @@ new Vue({
             }).then(
                 res => res.json()
             ).then(
-                data => this.rec = data.text
+                data => this.rec = data.message
             ).catch(err => console.error(err));
         }
     },

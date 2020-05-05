@@ -13,7 +13,8 @@ export class AppController {
   @Post()
   async create(@Res() res, @Body() data: any): Promise<void> {
     // console.log(data.audio);
-    res.status(HttpStatus.OK).json({ text: 'Qwertyqwe 123' });
+    let ans = await this.appService.makeReqToPython(data);
+    res.status(HttpStatus.OK).json(ans);
   }
 
 }
