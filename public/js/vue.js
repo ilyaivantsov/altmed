@@ -2,6 +2,7 @@ new Vue({
     el: '#app',
     data() {
         return {
+            getCalled: false,
             stream: null,
             socket: null,
             audioChunks: [],
@@ -58,9 +59,9 @@ new Vue({
                         let reader = new FileReader();
                         reader.readAsDataURL(audioBlob);
                         reader.onloadend = () => {
-                            base64 = reader.result;
+                            let base64 = reader.result;
                             base64 = base64.split(',')[1];
-                            this.rec = base64;
+                            this.sendAudioToServer(base64);
                         }
                         this.mediaRecorder = null;
                         this.stream = null;
@@ -78,11 +79,21 @@ new Vue({
                     console.warn(error.message);
                 }
             )
+        },
+        sendAudioToServer: function (base64) {
+            const url = 'http://localhost:3000';
+            const data = { audio: base64 };
+            fetch(url, {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(
+                res => res.json()
+            ).then(
+                data => this.rec = data.text
+            ).catch(err => console.error(err));
         }
     },
-    created() {
-        navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
-        // this.socket = io.connect("localhost:3000");
-        console.log('asdasd');
-    }
 });

@@ -31,6 +31,25 @@
 </head>
 
 <body>
+    <div style="display: none;">
+        <header class="header">
+            <div class="logo-container">
+                <h1 class="logo-text">
+                    BIS-<span class="logo-highlight">Team</span>
+                </h1>
+            </div>
+        </header>
+        <div class="content-container">
+            <div class="active-users-panel" id="active-user-container">
+                <h3 class="panel-title">Active Users:</h3>
+            </div>
+            <div class="video-chat-container">
+                <h2 class="talk-info" id="talking-with-info">
+                    Select active user on the left menu.
+                </h2>
+            </div>
+        </div>
+    </div>
     <div id="app">
         <v-app>
             <v-app-bar app color="white" dark>
@@ -172,6 +191,7 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
     <script src="/js/vue.js"></script>
+    <script src="/js/index.js"></script>
 </body>
 
 </html>
