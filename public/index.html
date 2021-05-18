@@ -65,7 +65,7 @@
                     <v-icon dark>mdi-github-circle</v-icon>
                 </v-btn>
             </v-app-bar>
-            <v-content>
+            <v-main>
                 <v-row>
                     <v-col cols="12">
                         <v-row justify="center" aling="center">
@@ -91,7 +91,7 @@
                             <v-btn class="mx-2" outlined large fab @click="profile = true">
                                 <v-icon dark>mdi-pencil</v-icon>
                             </v-btn>
-                            <v-btn class="mx-2" outlined large fab color="red darken-1" @click="startRec">
+                            <v-btn class="mx-2" outlined large fab color="red darken-1" @click="getJoke">
                                 <v-icon dark>mdi-phone-forward</v-icon>
                             </v-btn>
                             <v-dialog v-model="profile" fullscreen hide-overlay transition="dialog-bottom-transition"
@@ -179,12 +179,10 @@
                                     <div style="flex: 1 1 auto;"></div>
                                 </v-card>
                             </v-dialog>
-
-
                         </v-row>
                     </v-col>
                 </v-row>
-            </v-content>
+            </v-main>
         </v-app>
     </div>
 

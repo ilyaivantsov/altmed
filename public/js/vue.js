@@ -80,8 +80,22 @@ new Vue({
                 }
             )
         },
+        getJoke: function () {
+            this.recorder = true;
+            const url = `http://${location.host}/joke`;
+            fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(
+                res => res.json()
+            ).then(
+                data => this.rec = data.value
+            ).catch(err => console.error(err));
+        },
         sendAudioToServer: function (base64) {
-            const url = 'http://localhost:3000';
+            const url = `http://${location.host}`;
             const data = { audio: base64 };
             fetch(url, {
                 method: 'POST',
@@ -92,7 +106,7 @@ new Vue({
             }).then(
                 res => res.json()
             ).then(
-                data => this.rec = data.message
+                // data => this.rec = data.message
             ).catch(err => console.error(err));
         }
     },

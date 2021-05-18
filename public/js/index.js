@@ -72,7 +72,7 @@ function updateUserList(socketIds) {
   });
 }
 
-const socket = io.connect("localhost:3000");
+const socket = io.connect(`${location.host}`);
 
 socket.on("update-user-list", ({ users }) => {
   updateUserList(users);
@@ -89,7 +89,7 @@ socket.on("remove-user", ({ socketId }) => {
 socket.on("call-made", async data => {
   if (getCalled) {
     const confirmed = confirm(
-      `"Доктор: ${data.socket}" хочет с вами связаться. OK?`
+      `"Доктор: ${data.socket}" хочет с вами связаться.OK ? `
     );
 
     if (!confirmed) {

@@ -1,5 +1,24 @@
 # BIS-Team
 
+## Installation & Development
+
+```bash
+$ npm install
+$ npm run start:dev
+```
+
+## Build
+
+```bash
+$ npm run build
+$ npm run start:prod
+```
+
+## Links
+
+ - [Страница клиента](http://localhost:3000)
+ - [Админка](http://localhost:3000/doctor)
+
 ## Ссылки
 
 - Authors 

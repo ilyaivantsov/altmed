@@ -1,11 +1,13 @@
 import { Injectable, HttpService } from '@nestjs/common';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class AppService {
   constructor(private httpService: HttpService) { }
 
-  async makeReqToPython(data: any): Promise<any> {
-    let ans = await this.httpService.axiosRef.post('http://localhost:8888/recognize', data);
-    return ans;
+  joke(): any {
+    return this.httpService.get('https://matchilling-chuck-norris-jokes-v1.p.rapidapi.com/jokes/random').pipe(
+      map(({ data }) => data)
+    );
   }
 }
